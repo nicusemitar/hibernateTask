@@ -1,9 +1,6 @@
 package model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,6 +10,7 @@ import java.util.Set;
 @Data
 @Getter
 @Setter
+@ToString
 @Table(name = "role_table")
 @NoArgsConstructor
 public class Role {
@@ -25,16 +23,8 @@ public class Role {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
-    private Set<User> userSet = new HashSet<>();
-
     public Role(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 }
 

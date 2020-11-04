@@ -2,7 +2,9 @@ package model;
 
 import enums.DisciplineType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@ToString
 @Table(name = "discipline_table")
 public class Discipline {
     @Id
@@ -18,33 +22,18 @@ public class Discipline {
     private int id;
 
     @OneToOne
-    @JoinColumn(name="HeadOfDiscipline",referencedColumnName = "user_id")
+    @JoinColumn(name = "HeadOfDiscipline", referencedColumnName = "user_id")
     private User headOfDiscipline;
 
     @Column(name = "name")
     @Enumerated(EnumType.STRING)
     private DisciplineType disciplineType;
 
-    @OneToMany(mappedBy = "discipline",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<User> users;
 
-    public Discipline() {
-
-    }
-
-    public Discipline(DisciplineType am) {
-        this.disciplineType = am;
-    }
-
-    public void setUser(User user) {
-        this.headOfDiscipline = user;
-    }
-
-    @Override
-    public String toString() {
-        return "Discipline{" +
-                ", disciplineType=" + disciplineType +
-                ", disciplineHead=" + headOfDiscipline +
-                '}';
+    public Discipline(DisciplineType disciplineType) {
+        this.disciplineType = disciplineType;
     }
 }

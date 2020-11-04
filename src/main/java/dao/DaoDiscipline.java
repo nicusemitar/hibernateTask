@@ -10,6 +10,4 @@ public interface DaoDiscipline extends CommonDaoEntity {
 
     Discipline getDiscipline(DisciplineType disciplineType) throws SQLException;
 
-    List<Discipline> getAll() throws SQLException;
-
 }

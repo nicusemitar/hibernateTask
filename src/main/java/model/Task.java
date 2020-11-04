@@ -4,15 +4,17 @@ import enums.Status;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Data
 @Getter
 @Setter
+@ToString
 @Table(name = "task_table")
 public class Task {
     @Id
@@ -27,10 +29,10 @@ public class Task {
     private String description;
 
     @Column(name = "startDate")
-    private LocalDate startDate;
+    private Date startDate;
 
     @Column(name = "dueDate")
-    private LocalDate dueDate;
+    private Date dueDate;
 
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
@@ -39,16 +41,11 @@ public class Task {
     public Task() {
     }
 
-    public Task(String name, String description, LocalDate startDate, LocalDate dueDate, Status status) {
+    public Task(String name, String description, Date startDate, Date dueDate, Status status) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.dueDate = dueDate;
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "[ " + "name:" + name + "dueDate: " + dueDate + "status: " + status + "]";
     }
 }

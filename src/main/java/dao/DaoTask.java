@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface DaoTask extends CommonDaoEntity{
 
-    List<Task> getAll() throws SQLException;
-
 }

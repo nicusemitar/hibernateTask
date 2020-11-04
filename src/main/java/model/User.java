@@ -1,17 +1,23 @@
 package model;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@ToString
 @Table(name = "user_t")
+@SQLDelete(sql = "update user_t set name='DELETE', last_name='DELETE', e_mail='DELETE', enabled=false where user_id =?")
 public class User {
 
     @Id
@@ -32,15 +38,13 @@ public class User {
     private String userName;
 
     @Column(name = "created")
-    private String createdAt;
+    private Date createdAt;
 
     @Column(name = "enabled")
     private boolean enabled;
 
-    @OneToOne(mappedBy = "headOfDiscipline")
-    private Discipline headOfDiscipline;
-
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Discipline discipline;
 
 
@@ -50,13 +54,15 @@ public class User {
             joinColumns = @JoinColumn(name = "u_id"),
             inverseJoinColumns = @JoinColumn(name = "r_id")
     )
+    @ToString.Exclude
     private Set<Role> roles;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private List<Task> taskList;
 
-    public User(String name, String lname, String email, String userName, String createdAt, boolean enabled, Discipline discipline, List<Task> taskList, Set<Role> roleSet) {
+    public User(String name, String lname, String email, String userName, Date createdAt, boolean enabled, Discipline discipline, List<Task> taskList, Set<Role> roleSet) {
         this.name = name;
         this.lastName = lname;
         this.email = email;
@@ -68,21 +74,4 @@ public class User {
         this.taskList = taskList;
     }
 
-    public User() {
-
-    }
-
-    public User(String name, String lastName, String eMail, String username) {
-        this.name = name;
-        this.lastName = lastName;
-        this.email = eMail;
-        this.userName = username;
-    }
-
-    @Override
-    public String toString() {
-        return "User[ " + " fName: " + name + " lName: " + lastName +
-                " e-mail: " + email + " username:" + userName + " discipline: " + discipline.getDisciplineType() +
-                " roles: " + roles + " tasks: " + taskList;
-    }
 }

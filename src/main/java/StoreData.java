@@ -10,7 +10,7 @@ import service.TaskService;
 import service.UserService;
 import utils.HibernateUtils;
 
-import javax.persistence.TemporalType;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
@@ -45,7 +45,7 @@ public class StoreData {
         }
 
         //Set HeadOfDiscipline for AM
-        disciplineList.get(0).setUser(userList.get(0));
+        disciplineList.get(0).setHeadOfDiscipline(userList.get(0));
         disciplineService.update(disciplineList.get(0));
 
         //Set HeadOfDiscipline for DEV
@@ -65,17 +65,17 @@ public class StoreData {
         disciplineService.update(disciplineList.get(2));
 
         //Adding users for DEV and Test Head
-        User DevHead = new User("Andrei", "Drumov", "andreidrumov@endava.com", "drumova", LocalDate.now().toString(), true, disciplineList.get(1), Collections.EMPTY_LIST
+        User DevHead = new User("Andrei", "Drumov", "andreidrumov@endava.com", "drumova", Date.valueOf(LocalDate.now()), true, disciplineList.get(1), Collections.EMPTY_LIST
                 , roles.stream().filter(it -> it.getName().equals("Head")).collect(Collectors.toSet()));
         userService.add(DevHead);
 
-        User TestHead = new User("Vitalie", "Valachi", "vitalievalachi@endava.com", "valachiv", LocalDate.now().toString(), true, disciplineList.get(2), Collections.EMPTY_LIST
+        User TestHead = new User("Vitalie", "Valachi", "vitalievalachi@endava.com", "valachiv", Date.valueOf(LocalDate.now()), true, disciplineList.get(2), Collections.EMPTY_LIST
                 , roles.stream().filter(it -> it.getName().equals("Head")).collect(Collectors.toSet()));
         userService.add(TestHead);
 
         //Set DEV and Test HEAD
-        disciplineList.get(1).setUser(DevHead);
-        disciplineList.get(2).setUser(TestHead);
+        disciplineList.get(1).setHeadOfDiscipline(DevHead);
+        disciplineList.get(2).setHeadOfDiscipline(TestHead);
         disciplineService.update(disciplineList.get(1));
         disciplineService.update(disciplineList.get(2));
         printSeparator();
@@ -106,7 +106,7 @@ public class StoreData {
         userService.closeTransactionSession();
 
         //Change the HeadOfDiscipline for Development discipline.
-        User newDevHeadUser = new User("Dumitru", "Laptecru", "dimalapteacru@endava.com", "dima", LocalDate.now().toString(), true, disciplineList.get(1), Collections.EMPTY_LIST
+        User newDevHeadUser = new User("Dumitru", "Laptecru", "dimalapteacru@endava.com", "dima", Date.valueOf(LocalDate.now()), true, disciplineList.get(1), Collections.EMPTY_LIST
                 , roles.stream().filter(it -> it.getName().equals("Head")).collect(Collectors.toSet()));
         userService.add(newDevHeadUser);
         Discipline DevDiscipline = disciplineService.getDiscipline(DisciplineType.DEV);
@@ -114,7 +114,7 @@ public class StoreData {
         disciplineService.closeTransactionSession();
         printSeparator();
 
-        DevDiscipline.setUser(newDevHeadUser);
+        DevDiscipline.setHeadOfDiscipline(newDevHeadUser);
         disciplineService.update(DevDiscipline);
         System.out.println(disciplineService.getDiscipline(DisciplineType.DEV));
         disciplineService.closeTransactionSession();
@@ -138,14 +138,10 @@ public class StoreData {
     }
 
     private static Set<Role> roleFactory() {
-        Role role1 = new Role("Head");
-        Role role2 = new Role("Employee");
-        Role role3 = new Role("Intern");
-
         Set<Role> roles = new HashSet<>();
-        roles.add(role1);
-        roles.add(role2);
-        roles.add(role3);
+        roles.add(new Role("Head"));
+        roles.add(new Role("Employee"));
+        roles.add(new Role("Intern"));
 
         return roles;
     }
@@ -161,13 +157,13 @@ public class StoreData {
 
     private static List<User> AmUserFactory(Set<Role> roleSet, List<Task> tasks, Discipline discipline) {
         List<User> users = new ArrayList<>();
-        users.add(new User("nicolae", "semitar", "semitar@endava.com", "nsemitar", LocalDate.now().toString(), true,
+        users.add(new User("nicolae", "semitar", "semitar@endava.com", "nsemitar", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(0)), roleSet));
-        users.add(new User("dima", "cretu", "dima@endava.com", "dima95", LocalDate.now().toString(), true,
+        users.add(new User("dima", "cretu", "dima@endava.com", "dima95", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(1)), roleSet));
-        users.add(new User("ion", "railean", "irailean@endava.com", "railean", LocalDate.now().toString(), true,
+        users.add(new User("ion", "railean", "irailean@endava.com", "railean", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(2)), roleSet));
-        users.add(new User("dorel", "buhnici", "dorel@endava.com", "dorel", LocalDate.now().toString(), true,
+        users.add(new User("dorel", "buhnici", "dorel@endava.com", "dorel", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(3)), roleSet));
 
 
@@ -176,13 +172,13 @@ public class StoreData {
 
     private static List<User> TestUserFactory(Set<Role> roleSet, List<Task> tasks, Discipline discipline) {
         List<User> users = new ArrayList<>();
-        users.add(new User("alina", "hadjivu", "alin@endava.com", "alina", LocalDate.now().toString(), true,
+        users.add(new User("alina", "hadjivu", "alin@endava.com", "alina", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(0)), roleSet));
-        users.add(new User("veronica", "ioana", "vero@endava.com", "vero", LocalDate.now().toString(), true,
+        users.add(new User("veronica", "ioana", "vero@endava.com", "vero", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(1)), roleSet));
-        users.add(new User("vadim", "besliu", "vadim@endava.com", "vadim", LocalDate.now().toString(), true,
+        users.add(new User("vadim", "besliu", "vadim@endava.com", "vadim", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(2)), roleSet));
-        users.add(new User("adrian", "pricop", "pricop@endava.com", "adrian", LocalDate.now().toString(), true,
+        users.add(new User("adrian", "pricop", "pricop@endava.com", "adrian", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(3)), roleSet));
 
         return users;
@@ -190,31 +186,31 @@ public class StoreData {
 
     private static List<User> DevUserFactory(Set<Role> roleSet, List<Task> tasks, Discipline discipline) {
         List<User> users = new ArrayList<>();
-        users.add(new User("cristi", "dodita", "dod@endava.com", "dodita", LocalDate.now().toString(), true,
+        users.add(new User("cristi", "dodita", "dod@endava.com", "dodita",  Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(0)), roleSet));
-        users.add(new User("artur", "vieru", "vieru@endava.com", "artur", LocalDate.now().toString(), true,
+        users.add(new User("artur", "vieru", "vieru@endava.com", "artur", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(1)), roleSet));
-        users.add(new User("stefan", "josu", "josus@endava.com", "stef", LocalDate.now().toString(), true,
+        users.add(new User("stefan", "josu", "josus@endava.com", "stef", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(2)), roleSet));
-        users.add(new User("costea", "utrei", "costea@endava.com", "costea", LocalDate.now().toString(), true,
+        users.add(new User("costea", "utrei", "costea@endava.com", "costea", Date.valueOf(LocalDate.now()), true,
                 discipline, Arrays.asList(tasks.get(3)), roleSet));
 
         return users;
     }
 
     public static List<Task> taskFactoryAm() {
-        return Arrays.asList(new Task("Hibernate", "Hibernate 10 subTasks to be Done", LocalDate.of(2020, 10, 31), LocalDate.of(2020,11,30), Status.DONE),
-                new Task("UI - HTML", "A post card in HTML", LocalDate.of(2020, 10, 31), LocalDate.of(2020,11,15), Status.PROGRESS),
-                new Task("UI - CSS", "A family Tree in CSS", LocalDate.of(2020, 10, 31), LocalDate.of(2020,11,18), Status.TODO),
-                new Task("JavaCore", "JavaCore Exceptions", LocalDate.of(2020, 10, 31), LocalDate.of(2020,11,02), Status.PROGRESS));
+        return Arrays.asList(new Task("Hibernate", "Hibernate 10 subTasks to be Done", Date.valueOf(LocalDate.of(2020, 10, 31)), Date.valueOf(LocalDate.of(2020,11,30)), Status.DONE),
+                new Task("UI - HTML", "A post card in HTML", Date.valueOf(LocalDate.of(2020, 10, 31)), Date.valueOf(LocalDate.of(2020,11,15)), Status.PROGRESS),
+                new Task("UI - CSS", "A family Tree in CSS", Date.valueOf(LocalDate.of(2020, 10, 31)), Date.valueOf(LocalDate.of(2020,11,18)), Status.TODO),
+                new Task("JavaCore", "JavaCore Exceptions", Date.valueOf(LocalDate.of(2020, 10, 31)), Date.valueOf(LocalDate.of(2020,11,02)), Status.PROGRESS));
 
     }
 
     public static List<Task> taskFactoryDev() {
-        return Arrays.asList(new Task("Clouds", "Clouds", LocalDate.of(2020, 10, 31), LocalDate.of(2020,11,02), Status.TODO),
-                new Task("Basic Code 1", "Basic Code 1", LocalDate.of(2020, 10, 31), LocalDate.of(2020,11,13), Status.DONE),
-                new Task("Basic Code 2", "Basic Code 2", LocalDate.of(2020, 10, 31), LocalDate.of(2020,11,14), Status.DONE),
-                new Task("Basic Code 3", "Basic Code 3", LocalDate.of(2020, 10, 31), LocalDate.of(2020,11,15), Status.PROGRESS));
+        return Arrays.asList(new Task("Clouds", "Clouds",Date.valueOf(LocalDate.of(2020, 10, 31)), Date.valueOf(LocalDate.of(2020,11,02)), Status.TODO),
+                new Task("Basic Code 1", "Basic Code 1", Date.valueOf(LocalDate.of(2020, 10, 31)), Date.valueOf(LocalDate.of(2020,11,13)), Status.DONE),
+                new Task("Basic Code 2", "Basic Code 2", Date.valueOf(LocalDate.of(2020, 10, 31)), Date.valueOf(LocalDate.of(2020,11,14)), Status.DONE),
+                new Task("Basic Code 3", "Basic Code 3", Date.valueOf(LocalDate.of(2020, 10, 31)), Date.valueOf(LocalDate.of(2020,11,15)), Status.PROGRESS));
 
     }
 

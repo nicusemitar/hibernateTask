@@ -17,6 +17,4 @@ public interface DaoUser extends CommonDaoEntity {
 
     List<User> getUserById(int id) throws SQLException;
 
-    List<User> getAll() throws SQLException;
-
 }

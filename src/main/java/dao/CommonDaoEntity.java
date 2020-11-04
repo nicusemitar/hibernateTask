@@ -13,4 +13,6 @@ public interface CommonDaoEntity<T> {
 
     void delete(T entity) throws SQLException;
 
+    List<T> getAll() throws SQLException;
+
 }

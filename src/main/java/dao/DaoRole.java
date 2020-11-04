@@ -9,5 +9,4 @@ public interface DaoRole extends CommonDaoEntity {
 
     public List<Role> getRoleByName(String name) throws SQLException;
 
-    List<Role> getAll() throws SQLException;
 }
